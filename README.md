@@ -1,2 +1,4 @@
-# decompressor
-Este es un descompressor (no completado), de momento se usa con archivos en formato .tar y .gz.
+# Decompressor
+
+Este es un descompresor (no completado).  
+De momento, se usa con archivos en formato `.tar` y `.gz`.
