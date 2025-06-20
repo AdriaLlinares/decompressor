@@ -74,6 +74,41 @@ done
 
 echo -e "\n\n[^_^] Archivo final: $last_valid_name"
 }
+
+descomprimir_zip(){
+
+  file_name=""
+
+echo -e " [+] Que fixero .zip quieres descomprimir: \n"
+
+archivos=$(ls *.zip 2>/dev/null)
+
+if [ -z "$archivos" ]; then
+  echo -e "\n [!] No se ha encontrado ningun archivo .zip en el directorio actual.\n"
+  return
+else
+  echo "$archivos"
+fi
+
+echo -e "\n [+] Introduce el nombre del archivo que deseas descomprimir: \n"
+
+read file_name
+
+decompressed_file_name="$(7z l "$file_name" | tail -n 3 | head -n1 | awk '$NF{print $NF}')"
+
+7z x "$file_name" &>/dev/null
+last_valid_name="$decompressed_file_name"
+
+while [ $decompressed_file_name ]; do
+  echo -e "\n [+] Nuevo archivo descomprimido: $decompressed_file_name"
+  7z x "$decompressed_file_name" &>/dev/null
+  last_valid_name="$decompressed_file_name"
+  decompressed_file_name="$(7z l "$decompressed_file_name" 2>/dev/null | tail -n 3 | head -n1 | awk '$NF{print $NF}')"
+done
+
+echo -e "\n\n[^_^] Archivo final: $last_valid_name"
+}
+
 menu(){
   opcion=""
 
@@ -81,12 +116,16 @@ menu(){
 
   echo -e "\n   [1] .gz\n"
   echo -e "\n   [2] .tar\n"
+  echo -e "\n   [3] .zip\n"
+
   read opcion
 
-  if [ "$opcion" == "1" ]; then 
+  if [ "$opcion" == "1" ]; then
     descomprimir_gz
   elif [ "$opcion" == "2" ]; then
-    descomprimir_tar  
+    descomprimir_tar
+  elif [ "$opcion" == "3" ]; then
+    descomprimir_zip
   fi
 }
 
